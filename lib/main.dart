@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'event_select.dart';
 
 // void main() {
 //   runApp(const MyApp());
@@ -11,7 +12,7 @@ void main() {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => const firstRoute(),
+        '/': (context) => const EventSelect(),
         '/second': (context) => const secondRoute(),
         '/third': (context) => const thirdRoute(),
       },
@@ -76,49 +77,8 @@ void main() {
 //   }
 // }
 
-// ignore: camel_case_types
-class firstRoute extends StatelessWidget {
-  const firstRoute({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('offdabreak'),
-        backgroundColor: Color.fromARGB(255, 0, 225, 255),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(10),
-        children: [
-          Center(
-            child: ElevatedButton(
-              child: const Text('Second screen'),
-              onPressed: () {
-                Navigator.pushNamed(context, '/second');
-              },
-            ),
-          ),
-          Center(
-            child: ElevatedButton(
-              child: const Text('Third screen'),
-              onPressed: () {
-                Navigator.pushNamed(context, '/third');
-              },
-            ),
-          ),
-          Center(
-            child: ElevatedButton(
-              child: const Text('fourth screen'),
-              onPressed: () {
-                Navigator.pushNamed(context, '/third');
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//Moved to event_select.dart
 
 // ignore: camel_case_types
 class secondRoute extends StatelessWidget {
