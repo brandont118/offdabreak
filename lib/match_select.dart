@@ -7,6 +7,7 @@ class MatchSelect extends StatefulWidget {
     'Team A vs Team B',
     'Team C vs Team D',
     'Team E vs Team F',
+    'Team G vs Team H',
   ];
 
   @override

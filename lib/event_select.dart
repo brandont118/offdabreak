@@ -6,27 +6,26 @@ class EventSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         title: const Text("offdabreak"),
         backgroundColor: const Color.fromARGB(255, 0, 225, 255),
       ),
       body: Stack(
-        children: [ 
+        children: [
           Container(
-                  height: 200,
-                  width: double.infinity,
-                  color: const Color.fromARGB(255, 0, 225, 255),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    "offdabreak",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+            height: 200,
+            width: double.infinity,
+            color: const Color.fromARGB(255, 0, 225, 255),
+            alignment: Alignment.center,
+            child: const Text(
+              "offdabreak",
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
           // Scrollable content including the app bar
           SingleChildScrollView(
             child: Column(
@@ -46,8 +45,8 @@ class EventSelect extends StatelessWidget {
                 //     ),
                 //   ),
                 // ),
-                const SizedBox(height: 300),
-                const SizedBox(height: 20),
+                const SizedBox(height: 250),
+                // const SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(
                     child: const Text('Second screen'),
@@ -73,19 +72,6 @@ class EventSelect extends StatelessWidget {
                 ),
 
                 //delete
-const SizedBox(height: 20),
-                Center(
-                  child: ElevatedButton(
-                    child: const Text('Third screen'),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/third');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(450, 80),
-                    ),
-                  ),
-                ),
-
                 const SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(
@@ -151,7 +137,19 @@ const SizedBox(height: 20),
                   ),
                 ),
 
-                
+                const SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton(
+                    child: const Text('Third screen'),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/third');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(450, 80),
+                    ),
+                  ),
+                ),
+
                 //delete
                 const SizedBox(height: 20),
                 Center(
@@ -183,33 +181,33 @@ const SizedBox(height: 20),
               child: const Icon(Icons.add),
             ),
           ),
-
-          Center(
-                  child: ElevatedButton(
-                    child: const Text('Second screen'),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/second');
-                    },
-                    style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(450, 80),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 200,
-                  width: double.infinity,
-                  color: const Color.fromARGB(255, 0, 225, 255),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    "offdabreak",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-
+          Container(
+            height: 200,
+            width: double.infinity,
+            color: const Color.fromARGB(255, 0, 225, 255),
+            alignment: Alignment.center,
+            child: const Text(
+              "offdabreak",
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+            Column(
+               mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 150),
+              ElevatedButton(
+                child: const Text('Top screen'),
+                onPressed: () {
+                Navigator.pushNamed(context, '/second');
+                },
+                style: ElevatedButton.styleFrom(fixedSize: const Size(450, 80)),
+              ),
+          ],
+              ),
         ],
       ),
     );
