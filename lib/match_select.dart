@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-List<String> matches = [
-  'Team A vs Team B',
-  'Team C vs Team D',
-  'Team E vs Team F',
-  'Team G vs Team H',
-];
+Map<String, String> matches = {
+  'Team A vs Team B': "10:00 am",
+  'Team C vs Team D': "11:00 am",
+  'Team E vs Team F': "10:20 am",
+  'Team G vs Team H': "10:50 am",
+};
 
 class MatchSelect extends StatefulWidget {
   const MatchSelect({super.key});
@@ -18,7 +19,10 @@ class MatchSelect extends StatefulWidget {
     "Los Angeles Ironmen",
     "Chicago AfterShock",
     "Seattle Uprising",
+    "ASG Aftermath",
   ];
+
+  static List<String> ap = ['am', 'pm'];
 
   @override
   State<MatchSelect> createState() => _MatchSelectState();
@@ -27,9 +31,15 @@ class MatchSelect extends StatefulWidget {
 class _MatchSelectState extends State<MatchSelect> {
   final TextEditingController team1Controller = TextEditingController();
   final TextEditingController team2Controller = TextEditingController();
+  final TextEditingController hourController = TextEditingController();
+  final TextEditingController minutesController = TextEditingController();
+  final TextEditingController apController = TextEditingController();
 
   String? selectedteam1;
   String? selectedteam2;
+  String? selectedhour;
+  String? selectedmin;
+  String? selectedap;
 
   @override
   // ignore: dead_code
@@ -44,21 +54,28 @@ class _MatchSelectState extends State<MatchSelect> {
           SingleChildScrollView(
             // would let us scroll
             child: Column(
-              children: matches.map((item) {
+              children: matches.entries.map((entry) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () => print("Pressed $item"),
-
-                        child: Text(item),
+                        onPressed: () => print("Pressed ${entry.key}"),
+                        child: Text(entry.key),
                       ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 176, 209, 235),
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Text(entry.value),
                     ),
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          delete_match(item, matches);
+                          delete_match(entry.key, matches);
                         });
                       },
                       style: ElevatedButton.styleFrom(
@@ -88,120 +105,214 @@ class _MatchSelectState extends State<MatchSelect> {
 
   Future<Object?> new_match_popup(BuildContext context) {
     return showGeneralDialog(
-      context: context,
-      barrierColor: Colors.black,
-      barrierDismissible: true,
-      barrierLabel: 'Full Screen Dialog',
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder:
-          (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-          ) {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Create New Match'),
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.pop(context),
+    context: context,
+    barrierColor: Colors.black,
+    barrierDismissible: true,
+    barrierLabel: 'Full Screen Dialog',
+    transitionDuration: const Duration(milliseconds: 300),
+    pageBuilder:
+        (
+          BuildContext context,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+        ) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Create New Match'),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: DropdownMenu<String>(
+                        initialSelection: '',
+                        hintText: '00',
+                        enableSearch: true,
+                        controller: hourController,
+                        requestFocusOnTap: true,
+                        showTrailingIcon: false,
+                        leadingIcon: Icon(Icons.access_alarm),
+                        enabled: true,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(2),
+                          FilteringTextInputFormatter.allow(RegExp(r'^(?:1[0-2]|[1-9])$')),
+                        ],
+                        menuStyle: MenuStyle(
+                          maximumSize: WidgetStatePropertyAll(
+                            Size.fromHeight(200),
+                          ), // 👈 limit height
+                        ),
+                        dropdownMenuEntries: List.generate(
+                          13,
+                          (index) => DropdownMenuEntry<String>(
+                            value: index.toString().padLeft(2, '0'),
+                            label: index.toString().padLeft(2, '0'),
+                          ),
+                        ),
+                        //
+                        onSelected: (String? item) {
+                          setState(() {
+                            selectedhour = item;
+                          });
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: DropdownMenu<String>(
+                        initialSelection: '',
+                        hintText: '00',
+                        enableSearch: true,
+                        controller: minutesController,
+                        requestFocusOnTap: true,
+                        showTrailingIcon: false,
+                        enabled: true,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(2),
+                          FilteringTextInputFormatter.allow(RegExp(r'^(?:[0-5]?\d|59)$')),
+                        ],
+                        menuStyle: MenuStyle(
+                          maximumSize: WidgetStatePropertyAll(
+                            Size.fromHeight(200),
+                          ), // 👈 limit height
+                        ),
+                        dropdownMenuEntries: List.generate(
+                          60,
+                          (index) => DropdownMenuEntry<String>(
+                            value: index.toString().padLeft(2, '0'),
+                            label: index.toString().padLeft(2, '0'),
+                          ),
+                        ),
+                        //
+                        onSelected: (String? item) {
+                          setState(() {
+                            selectedmin = item;
+                          });
+                          
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: DropdownMenu<String>(
+                        initialSelection: '',
+                        hintText: 'am/pm',
+                        enableSearch: true,
+                        controller: apController,
+                        requestFocusOnTap: false,
+                        showTrailingIcon: false,
+                        enabled: true,
+                        menuStyle: MenuStyle(
+                          maximumSize: WidgetStatePropertyAll(
+                            Size.fromHeight(200),
+                          ), // 👈 limit height
+                        ),
+                        dropdownMenuEntries: MatchSelect.ap
+                            .map(
+                              (time) => DropdownMenuEntry<String>(
+                                value: time,
+                                label: time,
+                              ),
+                            )
+                            .toList(),
+                        //
+                        onSelected: (String? item) {
+                          setState(() {
+                            selectedap = item;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(onPressed: () {}, child: Text('Game Time')),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: DropdownMenu<String>(
-                          initialSelection: 'team1',
-                          hintText: 'home team',
-                          controller: team1Controller,
-                          requestFocusOnTap: true,
-                          enableFilter: true,
-                          dropdownMenuEntries: MatchSelect.teams
-                              .map(
-                                (team) => DropdownMenuEntry<String>(
-                                  value: team,
-                                  label: team,
-                                ),
-                              )
-                              .toList(),
-                          onSelected: (String? item) {
-                            setState(() {
-                              selectedteam1 = item;
-                            });
-                          },
-                        ),
+                SizedBox(height: 10,),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: DropdownMenu<String>(
+                        initialSelection: 'team1',
+                        hintText: 'home team',
+                        controller: team1Controller,
+                        requestFocusOnTap: true,
+                        enableFilter: true,
+                        dropdownMenuEntries: MatchSelect.teams
+                            .map(
+                              (team) => DropdownMenuEntry<String>(
+                                value: team,
+                                label: team,
+                              ),
+                            )
+                            .toList(),
+                        onSelected: (String? item) {
+                          setState(() {
+                            selectedteam1 = item;
+                          });
+                        },
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: Text("vs", textAlign: TextAlign.center),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Text("vs", textAlign: TextAlign.center),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: DropdownMenu<String>(
+                        initialSelection: 'team2',
+                        hintText: 'away team',
+                        enableSearch: true,
+                        enableFilter: true,
+                        controller: team2Controller,
+                        requestFocusOnTap: true,
+                        dropdownMenuEntries: MatchSelect.teams
+                            .map(
+                              (team2) => DropdownMenuEntry<String>(
+                                value: team2,
+                                label: team2,
+                              ),
+                            )
+                            .toList(),
+                        onSelected: (String? item) {
+                          setState(() {
+                            selectedteam2 = item;
+                          });
+                        },
                       ),
-                      Expanded(
-                        flex: 3,
-                        child: DropdownMenu<String>(
-                          initialSelection: 'team2',
-                          hintText: 'away team',
-                          enableSearch: true,
-                          enableFilter: true,
-                          controller: team2Controller,
-                          requestFocusOnTap: true,
-                          dropdownMenuEntries: MatchSelect.teams
-                              .map(
-                                (team2) => DropdownMenuEntry<String>(
-                                  value: team2,
-                                  label: team2,
-                                ),
-                              )
-                              .toList(),
-                          onSelected: (String? item) {
-                            setState(() {
-                              selectedteam2 = item;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        add_team(selectedteam1, selectedteam2, matches);
-                      }); // Refresh the match list
-                      Navigator.pop(context);
-                    },
-                    child: Text("Add Match"),
-                  ),
-                ],
-              ),
-            );
-          },
-    );
+                    ),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      //Fix this so it takes in the time now.
+                      add_team(selectedteam1, selectedteam2, selectedhour,selectedmin,selectedap,matches);
+                    }); // Refresh the match list
+                    Navigator.pop(context);
+                  },
+                  child: Text("Add Match"),
+                ),
+              ],
+            ),
+          );
+        },
+  );
   }
 }
 
-void add_team(selectedteam1, selectedteam2, List<String> items) {
-  String match = ("$selectedteam1 vs $selectedteam2");
-  items.add(match);
+void add_team(selectedteam1, selectedteam2,hour,min,ap ,Map<String, String> items) {
+  if (selectedteam1 != null && selectedteam2 != null) { //Fix this if statement
+    String match = ("$selectedteam1 vs $selectedteam2");
+    items[match] = hour + ":$min $ap";
+  }
 }
 
-void delete_match(item, List<String> items) {
+void delete_match(String item, Map<String, String> items) {
   items.remove(item);
 }
-
-//  Row(
-//                   children: [
-//                     Expanded(flex: 4, child: TeamInput(teamName: "Team A")),
-//                     Expanded(
-//                       flex: 1,
-//                       child: Text("vs", textAlign: TextAlign.center),
-//                     ),
-//                     Expanded(flex: 4, child: TeamInput(teamName: "Team B")),
-//                   ],
-//                 ),
 
 class TeamInput extends StatefulWidget {
   const TeamInput({super.key, required this.teamName});
