@@ -8,7 +8,7 @@ class EventSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar( //change this so that AppBar is not needed
         title: const Text("Home"),
         titleTextStyle: const TextStyle(
           fontSize: 25,
@@ -92,7 +92,7 @@ class EventSelect extends StatelessWidget {
               ),
 
               image: DecorationImage(
-                image: AssetImage('assets/TransparentMan.png'),
+                image: AssetImage('assets/BetterMan.png'),
                 fit: BoxFit.cover,
                 opacity: 0.3,
                 alignment: Alignment(0, -0.9),
