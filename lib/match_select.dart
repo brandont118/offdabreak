@@ -1,40 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'match_item.dart';
 
-// ====== DATA MODEL ======
-class MatchItem {
-  MatchItem({
-    required this.id,
-    required this.team1,
-    required this.team2,
-    required this.date,
-    required this.hour12,
-    required this.minute,
-    required this.isPm,
-  });
-
-  final String id;
-  final String team1;
-  final String team2;
-  final DateTime date;
-  final int hour12;
-  final int minute;
-  final bool isPm;
-
-  DateTime get dateTime {
-    int h24 = hour12 % 12 + (isPm ? 12 : 0);
-    return DateTime(date.year, date.month, date.day, h24, minute);
-  }
-
-  String get timeLabel {
-    final hh = hour12.toString().padLeft(2, '0');
-    final mm = minute.toString().padLeft(2, '0');
-    return "$hh:$mm ${isPm ? 'pm' : 'am'}";
-  }
-
-  String get label => "$team1 vs $team2";
-}
+//moved MatchItem to seperate folder
 
 // ====== SCREEN ======
 class MatchSelect extends StatefulWidget {
@@ -58,17 +26,13 @@ class MatchSelect extends StatefulWidget {
 }
 
 class _MatchSelectState extends State<MatchSelect> {
-  final List<MatchItem> _matches = [
-    MatchItem(
-      id: "1",
-      team1: "Team A",
-      team2: "Team B",
-      date: DateTime.now(),
-      hour12: 10,
-      minute: 0,
-      isPm: false,
-    ),
-  ];
+
+  // ====Data From previous screen====
+  late final matchScreen = ModalRoute.of(context)!.settings.arguments as Map;
+
+  late final List<MatchItem> _matches = matchScreen['match'];
+  late final String imagePath = matchScreen['image'];
+  // ====Data From previous screen====
 
   final TextEditingController team1Controller = TextEditingController();
   final TextEditingController team2Controller = TextEditingController();
@@ -116,12 +80,28 @@ class _MatchSelectState extends State<MatchSelect> {
 
   String _dateLabel(DateTime d) {
     const weekdays = [
-      'Monday', 'Tuesday', 'Wednesday', 'Thursday', 
-      'Friday', 'Saturday', 'Sunday'
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
     ];
     const months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
 
     final weekday = weekdays[d.weekday - 1];
     final month = months[d.month - 1];
@@ -163,14 +143,27 @@ class _MatchSelectState extends State<MatchSelect> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context, _matches);
+          },
+        ),
         title: Text(
-      "Matches",
-      style: GoogleFonts.saira( // 👈 your Google Font
-        fontSize: 25,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      ),
-    ),
+          "Matches",
+          style: GoogleFonts.saira(
+            // 👈 your Google Font
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 12),
+            child: Image.asset(imagePath, width: 50, height: 45),
+          ),
+        ],
         backgroundColor: const Color.fromRGBO(8, 45, 115, 1),
       ),
       body: Container(
@@ -196,8 +189,10 @@ class _MatchSelectState extends State<MatchSelect> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 8,
+                    ),
                     // Date Header ("Monday, Jan 1")
                     child: Text(
                       _dateLabel(date),
@@ -208,91 +203,103 @@ class _MatchSelectState extends State<MatchSelect> {
                       ),
                     ),
                   ),
-                  ...dayMatches.map((m) => Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: kRowVPad, horizontal: kRowHPad),
-                        child: Dismissible(
-                          key: Key(m.id),
-                          direction: DismissDirection.endToStart,
-                          onDismissed: (_) => _deleteMatch(m.id),
-                          background: Container(
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 6, horizontal: 8),
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius:
-                                  BorderRadius.circular(kCapsuleRadius),
-                            ),
-                            alignment: Alignment.centerRight,
-                            padding: const EdgeInsets.only(right: 20),
-                            child: const Icon(Icons.delete, color: Colors.white),
+                  ...dayMatches.map(
+                    (m) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: kRowVPad,
+                        horizontal: kRowHPad,
+                      ),
+                      child: Dismissible(
+                        key: Key(m.id),
+                        direction: DismissDirection.endToStart,
+                        onDismissed: (_) => _deleteMatch(m.id),
+                        background: Container(
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 6,
+                            horizontal: 8,
                           ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  BorderRadius.circular(kCapsuleRadius),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.4),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 3),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(kCapsuleRadius),
+                          ),
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.only(right: 20),
+                          child: const Icon(Icons.delete, color: Colors.white),
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(kCapsuleRadius),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.4),
+                                blurRadius: 6,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              debugPrint("Pressed ${m.label}");
+                              Navigator.pushNamed(context, '/third');
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                              shadowColor: Colors.transparent,
+                              minimumSize: const Size.fromHeight(90),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  kCapsuleRadius,
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    m.team1.toUpperCase(),
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.saira(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    m.timeLabel,
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.roboto(
+                                      color: const Color.fromARGB(
+                                        255,
+                                        113,
+                                        113,
+                                        113,
+                                      ),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 22,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    m.team2.toUpperCase(),
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.saira(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
-                            child: ElevatedButton(
-                              onPressed: () =>
-                                  debugPrint("Pressed ${m.label}"),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.black,
-                                shadowColor: Colors.transparent,
-                                minimumSize: const Size.fromHeight(90),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(kCapsuleRadius),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      m.team1.toUpperCase(),
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.saira(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      m.timeLabel,
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.roboto(
-                                          color: const Color.fromARGB(255, 113, 113, 113),
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 22,
-                                          ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      m.team2.toUpperCase(),
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.saira(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ),
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                 ],
               );
             }),
@@ -315,7 +322,7 @@ class _MatchSelectState extends State<MatchSelect> {
     return DateTime(int.parse(p[0]), int.parse(p[1]), int.parse(p[2]));
   }
 
-//pop up screen for the new match
+  //pop up screen for the new match
   Future<Object?> _newMatchPopup(BuildContext context) {
     selectedteam1 = null;
     selectedteam2 = null;
@@ -340,7 +347,7 @@ class _MatchSelectState extends State<MatchSelect> {
       builder: (ctx) {
         final media = MediaQuery.of(ctx);
         return FractionallySizedBox(
-          heightFactor: 0.65, 
+          heightFactor: 0.65,
           child: Padding(
             padding: EdgeInsets.only(bottom: media.viewInsets.bottom),
             child: SingleChildScrollView(
@@ -360,8 +367,10 @@ class _MatchSelectState extends State<MatchSelect> {
                     ),
                     const Text(
                       'Create New Match',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 20),
 
@@ -413,13 +422,15 @@ class _MatchSelectState extends State<MatchSelect> {
                           child: DropdownMenu<String>(
                             hintText: 'HH',
                             controller: hourController,
-                            dropdownMenuEntries: List.generate(
-                              12, (i) => (i + 1)).map((h) =>
-                              DropdownMenuEntry<String>(
-                                value: h.toString().padLeft(2, '0'),
-                                label: h.toString().padLeft(2, '0'),
-                              ),
-                            ).toList(),
+                            dropdownMenuEntries:
+                                List.generate(12, (i) => (i + 1))
+                                    .map(
+                                      (h) => DropdownMenuEntry<String>(
+                                        value: h.toString().padLeft(2, '0'),
+                                        label: h.toString().padLeft(2, '0'),
+                                      ),
+                                    )
+                                    .toList(),
                             onSelected: (item) =>
                                 setState(() => selectedhour = item),
                           ),
@@ -429,13 +440,14 @@ class _MatchSelectState extends State<MatchSelect> {
                           child: DropdownMenu<String>(
                             hintText: 'MM',
                             controller: minutesController,
-                            dropdownMenuEntries: List.generate(
-                              60, (i) => i).map((m) =>
-                              DropdownMenuEntry<String>(
-                                value: m.toString().padLeft(2, '0'),
-                                label: m.toString().padLeft(2, '0'),
-                              ),
-                            ).toList(),
+                            dropdownMenuEntries: List.generate(60, (i) => i)
+                                .map(
+                                  (m) => DropdownMenuEntry<String>(
+                                    value: m.toString().padLeft(2, '0'),
+                                    label: m.toString().padLeft(2, '0'),
+                                  ),
+                                )
+                                .toList(),
                             onSelected: (item) =>
                                 setState(() => selectedmin = item),
                           ),
@@ -446,10 +458,12 @@ class _MatchSelectState extends State<MatchSelect> {
                             hintText: 'am/pm',
                             controller: apController,
                             dropdownMenuEntries: MatchSelect.ap
-                                .map((t) => DropdownMenuEntry<String>(
-                                      value: t,
-                                      label: t,
-                                    ))
+                                .map(
+                                  (t) => DropdownMenuEntry<String>(
+                                    value: t,
+                                    label: t,
+                                  ),
+                                )
                                 .toList(),
                             onSelected: (item) =>
                                 setState(() => selectedap = item),
@@ -468,10 +482,12 @@ class _MatchSelectState extends State<MatchSelect> {
                             hintText: 'home team',
                             controller: team1Controller,
                             dropdownMenuEntries: MatchSelect.teams
-                                .map((team) => DropdownMenuEntry<String>(
-                                      value: team,
-                                      label: team,
-                                    ))
+                                .map(
+                                  (team) => DropdownMenuEntry<String>(
+                                    value: team,
+                                    label: team,
+                                  ),
+                                )
                                 .toList(),
                             onSelected: (val) =>
                                 setState(() => selectedteam1 = val),
@@ -485,10 +501,12 @@ class _MatchSelectState extends State<MatchSelect> {
                             hintText: 'away team',
                             controller: team2Controller,
                             dropdownMenuEntries: MatchSelect.teams
-                                .map((team) => DropdownMenuEntry<String>(
-                                      value: team,
-                                      label: team,
-                                    ))
+                                .map(
+                                  (team) => DropdownMenuEntry<String>(
+                                    value: team,
+                                    label: team,
+                                  ),
+                                )
                                 .toList(),
                             onSelected: (val) =>
                                 setState(() => selectedteam2 = val),
@@ -520,7 +538,9 @@ class _MatchSelectState extends State<MatchSelect> {
                                   selectedap == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text("Please complete all fields."),
+                                    content: Text(
+                                      "Please complete all fields.",
+                                    ),
                                   ),
                                 );
                                 return;

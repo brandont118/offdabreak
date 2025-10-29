@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'match_item.dart';
 
 //event buttons
 class HomeButtonSpec {
@@ -16,10 +17,28 @@ class HomeButtonSpec {
 }
 
 //button format perm style
-class HomeButton extends StatelessWidget {
+class HomeButton extends StatefulWidget {
   final HomeButtonSpec spec;
 
   const HomeButton({super.key, required this.spec});
+
+  @override
+  State<HomeButton> createState() => _HomeButtonState();
+}
+
+class _HomeButtonState extends State<HomeButton> {
+  final List<MatchItem> _matches = [
+    MatchItem(
+      // Dummy data
+      id: "1",
+      team1: "Team A",
+      team2: "Team B",
+      date: DateTime.now(),
+      hour12: 10,
+      minute: 0,
+      isPm: false,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +58,12 @@ class HomeButton extends StatelessWidget {
         ),
 
         child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, spec.route);
+          onPressed: () async {
+            Navigator.pushNamed(
+              context,
+              widget.spec.route,
+              arguments: {'match': _matches, 'image': widget.spec.asset!},
+            );
           },
           style: ElevatedButton.styleFrom(
             fixedSize: const Size(400, 90),
@@ -53,21 +76,21 @@ class HomeButton extends StatelessWidget {
             alignment: Alignment.center, // centers the text
             children: [
               // Left-side icon or asset
-              if (spec.icon != null)
+              if (widget.spec.icon != null)
                 Positioned(
                   left: 5, // padding from left
-                  child: Icon(spec.icon, size: 40),
+                  child: Icon(widget.spec.icon, size: 40),
                 )
-              else if (spec.asset != null)
+              else if (widget.spec.asset != null)
                 Positioned(
                   left: 1,
-                  child: Image.asset(spec.asset!, height: 40),
+                  child: Image.asset(widget.spec.asset!, height: 40),
                 ),
 
               // Centered text
               Center(
                 child: Text(
-                  spec.label,
+                  widget.spec.label,
                   style: const TextStyle(
                     fontSize: 17,
                     // fontWeight: FontWeight.bold,

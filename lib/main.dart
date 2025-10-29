@@ -14,9 +14,9 @@ void main() {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => const EventSelect(),
-        '/second': (context) => const MatchSelect(),
-        '/third': (context) => const PointEdit(),
+        '/': (context) => EventSelect(),
+        '/second': (context) => MatchSelect(),
+        '/third': (context) =>  PointEdit(),
       },
     ),
   );

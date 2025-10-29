@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:offdabreak/eventButton_format.dart';
+import 'package:offdabreak/event_button_format.dart';
 
 
 class EventSelect extends StatelessWidget {
@@ -47,7 +47,7 @@ class EventSelect extends StatelessWidget {
                     ),
                     HomeButtonSpec(
                       label: 'Midwest',
-                      route: '/third',
+                      route: '/second',
                       asset: 'assets/midwest.png',
                     ),
                     HomeButtonSpec(
