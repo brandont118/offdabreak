@@ -61,18 +61,20 @@ class PointEdit extends StatelessWidget {
               RotatedBox( // TODO: Make a draggble icon 
               quarterTurns: 1, // Rotate by 45 degrees (pi/4 radians)
               child: Image(
-                image: NetworkImage(
-                  'https://pbleagues.com/uploads/layouts/8927/1-NXL_2025-TEXAS_2d.jpg', // Replace with your image asset path
-                ),
+                image: AssetImage('assets/lonestar_layout.png'),
               ),
             ),
           for (int i = 0; i < bunkerspots.length; i++) // outputs each mark for the bunker spots
             bunkerspots[i],
         ],
       ),
+
+      
     );
   }
 }
+
+
 
 // ignore: non_constant_identifier_names
 class markplayer extends StatefulWidget {

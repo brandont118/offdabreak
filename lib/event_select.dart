@@ -15,6 +15,15 @@ class EventSelect extends StatelessWidget {
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
+        actions: [
+    IconButton(
+      icon: const Icon(Icons.account_circle, color: Colors.white, size: 30),
+      onPressed: () {
+        _showProfileMenu(context);
+      },
+    ),
+  ],
+        
         // backgroundColor: Color.fromRGBO(70, 0, 0,1), //dark red
         backgroundColor: const Color.fromRGBO(8, 45, 115, 1),
       ),
@@ -183,4 +192,41 @@ class EventSelect extends StatelessWidget {
       ),
     );
   }
+
+  void _showProfileMenu(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return SafeArea(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Profile'),
+              onTap: () {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Profile tapped')),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/login', // 👈 goes back to your login screen
+                  (Route<dynamic> route) => false,
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 }

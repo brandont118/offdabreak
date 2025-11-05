@@ -1,0 +1,310 @@
+// import 'package:flutter/material.dart';
+
+// class LoginPage extends StatefulWidget {
+//   const LoginPage({Key? key}) : super(key: key);
+
+//   @override
+//   State<LoginPage> createState() => _LoginPageState();
+// }
+
+// class _LoginPageState extends State<LoginPage> {
+//   final _formKey = GlobalKey<FormState>();
+//   final _emailCtrl = TextEditingController();
+//   final _passwordCtrl = TextEditingController();
+
+//   bool _obscure = true;
+//   bool _isSubmitting = false;
+
+//   @override
+//   void dispose() {
+//     _emailCtrl.dispose();
+//     _passwordCtrl.dispose();
+//     super.dispose();
+//   }
+
+//   String? _validateEmail(String? v) {
+//     final value = (v ?? '').trim();
+//     if (value.isEmpty) return 'Email is required';
+//     final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+//     if (!emailRegex.hasMatch(value)) return 'Enter a valid email';
+//     return null;
+//   }
+
+//   String? _validatePassword(String? v) {
+//     final value = v ?? '';
+//     if (value.isEmpty) return 'Password is required';
+//     if (value.length < 6) return 'Use at least 6 characters';
+//     return null;
+//   }
+
+//   Future<void> _onLogin() async {
+//     if (!_formKey.currentState!.validate()) return;
+//     setState(() => _isSubmitting = true);
+//     await Future.delayed(const Duration(milliseconds: 800));
+//     if (!mounted) return;
+//     ScaffoldMessenger.of(context)
+//         .showSnackBar(const SnackBar(content: Text('Logged in!')));
+//     setState(() => _isSubmitting = false);
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     const primaryBlue = Color(0xFF2B43D9); // close to the screenshot accent
+//     final width = MediaQuery.of(context).size.width;
+//     final maxFormWidth = width < 420 ? width : 420.0;
+
+//     InputBorder roundedOutline(Color color, {bool focused = false}) =>
+//         OutlineInputBorder(
+//           borderRadius: BorderRadius.circular(14),
+//           borderSide: BorderSide(
+//             color: color,
+//             width: focused ? 2 : 1.2,
+//           ),
+//         );
+
+//     return Scaffold(
+//       extendBodyBehindAppBar: true,
+//       backgroundColor: Colors.transparent,
+//       body: Container(
+//         width: double.infinity,
+//         height: double.infinity,
+//         decoration: const BoxDecoration(
+//           // Your gradient background
+//           gradient: LinearGradient(
+//             begin: Alignment.topCenter,
+//             end: Alignment.bottomCenter,
+//             colors: [
+//               Color.fromRGBO(8, 45, 115, 1),
+//               Color.fromRGBO(34, 87, 170, 1),
+//               Color.fromRGBO(176, 209, 235, 1),
+//             ],
+//           ),
+//         ),
+//         child: SafeArea(
+//           child: SingleChildScrollView(
+//             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+//             child: Center(
+//               child: ConstrainedBox(
+//                 constraints: BoxConstraints(maxWidth: maxFormWidth),
+//                 child: Form(
+//                   key: _formKey,
+//                   child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.stretch,
+//                     children: [
+//                       const SizedBox(height: 8),
+
+//                       // Headings (no container behind)
+//                       Text(
+//                         'Login here',
+//                         textAlign: TextAlign.center,
+//                         style: const TextStyle(
+//                           fontSize: 28,
+//                           fontWeight: FontWeight.w800,
+//                           color: Color(0xFF2741C2), // bold blue title like mock
+//                         ),
+//                       ),
+//                       const SizedBox(height: 8),
+//                       Text(
+//                         "Welcome back you’ve\nbeen missed!",
+//                         textAlign: TextAlign.center,
+//                         style: TextStyle(
+//                           fontSize: 16,
+//                           height: 1.3,
+//                           color: Colors.black.withOpacity(0.8),
+//                           fontWeight: FontWeight.w600,
+//                         ),
+//                       ),
+
+//                       const SizedBox(height: 28),
+
+//                       // Email (rounded, light fill, blue outline)
+//                       TextFormField(
+//                         controller: _emailCtrl,
+//                         validator: _validateEmail,
+//                         keyboardType: TextInputType.emailAddress,
+//                         decoration: InputDecoration(
+//                           labelText: 'Email',
+//                           floatingLabelBehavior: FloatingLabelBehavior.never,
+//                           filled: true,
+//                           fillColor: Colors.white.withOpacity(0.6),
+//                           prefixIcon: const Icon(Icons.email_outlined),
+//                           enabledBorder:
+//                               roundedOutline(const Color(0xFF2741C2)),
+//                           focusedBorder:
+//                               roundedOutline(const Color(0xFF2741C2), focused: true),
+//                           errorBorder: roundedOutline(Colors.red),
+//                           focusedErrorBorder: roundedOutline(Colors.red, focused: true),
+//                           contentPadding: const EdgeInsets.symmetric(
+//                             horizontal: 16,
+//                             vertical: 16,
+//                           ),
+//                         ),
+//                       ),
+
+//                       const SizedBox(height: 16),
+
+//                       // Password (rounded, light fill, blue outline)
+//                       TextFormField(
+//                         controller: _passwordCtrl,
+//                         validator: _validatePassword,
+//                         obscureText: _obscure,
+//                         decoration: InputDecoration(
+//                           labelText: 'Password',
+//                           floatingLabelBehavior: FloatingLabelBehavior.never,
+//                           filled: true,
+//                           fillColor: Colors.white.withOpacity(0.6),
+//                           prefixIcon: const Icon(Icons.lock_outline),
+//                           suffixIcon: IconButton(
+//                             icon: Icon(
+//                               _obscure
+//                                   ? Icons.visibility_off_outlined
+//                                   : Icons.visibility_outlined,
+//                             ),
+//                             onPressed: () =>
+//                                 setState(() => _obscure = !_obscure),
+//                           ),
+//                           enabledBorder:
+//                               roundedOutline(const Color(0xFF2741C2)),
+//                           focusedBorder:
+//                               roundedOutline(const Color(0xFF2741C2), focused: true),
+//                           errorBorder: roundedOutline(Colors.red),
+//                           focusedErrorBorder: roundedOutline(Colors.red, focused: true),
+//                           contentPadding: const EdgeInsets.symmetric(
+//                             horizontal: 16,
+//                             vertical: 16,
+//                           ),
+//                         ),
+//                       ),
+
+//                       const SizedBox(height: 10),
+
+//                       // Forgot password (right aligned, link color)
+//                       Align(
+//                         alignment: Alignment.centerRight,
+//                         child: TextButton(
+//                           onPressed: () {
+//                             ScaffoldMessenger.of(context).showSnackBar(
+//                               const SnackBar(
+//                                   content: Text('Forgot password tapped')),
+//                             );
+//                           },
+//                           style: TextButton.styleFrom(
+//                             padding: EdgeInsets.zero,
+//                             foregroundColor: primaryBlue,
+//                             textStyle: const TextStyle(
+//                               fontWeight: FontWeight.w700,
+//                             ),
+//                           ),
+//                           child: const Text('Forgot your password?'),
+//                         ),
+//                       ),
+
+//                       const SizedBox(height: 8),
+
+//                       // Sign in button (pill + shadow)
+//                       SizedBox(
+//                         height: 50,
+//                         child: ElevatedButton(
+//                           onPressed: _isSubmitting ? null : _onLogin,
+//                           style: ElevatedButton.styleFrom(
+//                             backgroundColor: primaryBlue,
+//                             elevation: 10,
+//                             shadowColor: const Color(0x662B43D9),
+//                             shape: RoundedRectangleBorder(
+//                               borderRadius: BorderRadius.circular(14),
+//                             ),
+//                           ),
+//                           child: _isSubmitting
+//                               ? const SizedBox(
+//                                   width: 22,
+//                                   height: 22,
+//                                   child: CircularProgressIndicator(
+//                                     strokeWidth: 2,
+//                                     color: Colors.white,
+//                                   ),
+//                                 )
+//                               : const Text(
+//                                   'Sign in',
+//                                   style: TextStyle(
+//                                     fontSize: 16,
+//                                     fontWeight: FontWeight.w700,
+//                                     color: Colors.white,
+//                                   ),
+//                                 ),
+//                         ),
+//                       ),
+
+//                       const SizedBox(height: 24),
+
+//                       // Secondary link
+//                       const Center(
+//                         child: Text(
+//                           'Create new account',
+//                           style: TextStyle(
+//                             fontWeight: FontWeight.w600,
+//                             color: Colors.black87,
+//                           ),
+//                         ),
+//                       ),
+
+//                       const SizedBox(height: 16),
+
+//                       // Or continue with
+//                       Center(
+//                         child: Text(
+//                           'Or continue with',
+//                           style: TextStyle(
+//                             color: primaryBlue,
+//                             fontWeight: FontWeight.w700,
+//                           ),
+//                         ),
+//                       ),
+
+//                       const SizedBox(height: 12),
+
+//                       // Social row (small rounded squares)
+//                       Row(
+//                         mainAxisAlignment: MainAxisAlignment.center,
+//                         children: const [
+//                           _SocialSquare(icon: Icons.g_mobiledata),
+//                           SizedBox(width: 12),
+//                           _SocialSquare(icon: Icons.facebook),
+//                           SizedBox(width: 12),
+//                           _SocialSquare(icon: Icons.apple),
+//                         ],
+//                       ),
+
+//                       const SizedBox(height: 24),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class _SocialSquare extends StatelessWidget {
+//   final IconData icon;
+//   const _SocialSquare({Key? key, required this.icon}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Ink(
+//       width: 52,
+//       height: 44,
+//       decoration: BoxDecoration(
+//         color: Colors.white.withOpacity(0.85),
+//         borderRadius: BorderRadius.circular(10),
+//       ),
+//       child: InkWell(
+//         borderRadius: BorderRadius.circular(10),
+//         onTap: () {},
+//         child: Icon(icon, color: Colors.black87),
+//       ),
+//     );
+//   }
+// }
