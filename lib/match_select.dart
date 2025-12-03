@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'match_item.dart';
 
+
 //moved MatchItem to seperate folder
 
 // ====== SCREEN ======
@@ -26,13 +27,14 @@ class MatchSelect extends StatefulWidget {
 }
 
 class _MatchSelectState extends State<MatchSelect> {
-
   // ====Data From previous screen====
   late final matchScreen = ModalRoute.of(context)!.settings.arguments as Map;
 
   late final List<MatchItem> _matches = matchScreen['match'];
   late final String imagePath = matchScreen['image'];
   // ====Data From previous screen====
+  // ===Data To Next screen====
+  // ===Data To Next screen====
 
   final TextEditingController team1Controller = TextEditingController();
   final TextEditingController team2Controller = TextEditingController();
@@ -188,6 +190,7 @@ class _MatchSelectState extends State<MatchSelect> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  //* Date
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
@@ -239,9 +242,13 @@ class _MatchSelectState extends State<MatchSelect> {
                             ],
                           ),
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               debugPrint("Pressed ${m.label}");
-                              Navigator.pushNamed(context, '/third');
+                              //TODO: Push the new data of the points
+                              Navigator.pushNamed (
+                                context,
+                                '/third',
+                                arguments: {'point':m.points, "t1":m.team1,"t2":m.team2}); 
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
@@ -307,6 +314,7 @@ class _MatchSelectState extends State<MatchSelect> {
           ],
         ),
       ),
+      //* Add new match button
       floatingActionButton: FloatingActionButton(
         onPressed: () => _newMatchPopup(context),
         backgroundColor: const Color.fromRGBO(8, 45, 115, 1),

@@ -1,3 +1,4 @@
+import 'pointdata.dart';
 
 // ====== DATA MODEL ======
 class MatchItem {
@@ -9,7 +10,8 @@ class MatchItem {
     required this.hour12,
     required this.minute,
     required this.isPm,
-  });
+    List<PointData>? points,
+  }): points = points ?? [];
 
   final String id;
   final String team1;
@@ -18,6 +20,7 @@ class MatchItem {
   final int hour12;
   final int minute;
   final bool isPm;
+  final List<PointData> points;
 
   DateTime get dateTime {
     int h24 = hour12 % 12 + (isPm ? 12 : 0);

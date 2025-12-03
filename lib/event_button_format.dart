@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'match_item.dart';
+import 'pointdata.dart';
 
 //event buttons
 class HomeButtonSpec {
@@ -37,6 +38,27 @@ class _HomeButtonState extends State<HomeButton> {
       hour12: 10,
       minute: 0,
       isPm: false,
+      points: [
+      PointData(id: 1,winner: "ME", bunkers: ['home']),
+      PointData(id: 2),
+      PointData(id: 3),
+    ],
+    ),
+    MatchItem(
+      // Dummy data
+      id: "2",
+      team1: "Team C",
+      team2: "Team D",
+      date: DateTime.now(),
+      hour12: 11,
+      minute: 0,
+      isPm: false,
+      points: [
+      PointData(id: 1, winner: "ME"),
+      PointData(id: 2),
+      PointData(id: 3),
+      PointData(id: 4),
+    ],
     ),
   ];
 
