@@ -17,7 +17,7 @@ void main() {
     MaterialApp(
       title: 'Named Routes',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/', //!change back /welcome
+      initialRoute: '/welcome', //!change back /welcome
       routes: {
         '/welcome': (context) => WelcomePage(),
         '/login': (context) => LoginPage(),

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'userdata.dart';
+
+List<Userdata> users = [];
+
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({super.key});
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
 }
+
 
 class _SignUpPageState extends State<SignUpPage> {
   static const _blue = const Color.fromRGBO(8, 45, 115, 1);
@@ -16,6 +21,11 @@ class _SignUpPageState extends State<SignUpPage> {
   final _emailCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
   final _confirmCtrl = TextEditingController();
+
+  String _savedfirstname = '';
+  String _savedlastname = '';
+  String _savedEmail = '';
+  String _savedpassword = ''; // Add this to store the email
 
   bool _obscure1 = true;
   bool _obscure2 = true;
@@ -59,18 +69,26 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Future<void> _onRegister() async {
     if (!_formKey.currentState!.validate()) return;
+    
+    _formKey.currentState!.save(); // Call save to trigger onSaved callbacks
 
     setState(() => _submitting = true);
     await Future.delayed(const Duration(milliseconds: 600)); // mock API
     if (!mounted) return;
 
-    // TODO: replace with your real signup flow
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Registered!')));
+    // print('Saved email: $_savedEmail'); // Debug: verify email was saved
+    // print('First: $_savedfirstname, Last: $_savedlastname, Email: $_savedEmail');
 
-    // Navigate to login or home
-    Navigator.of(context).pushReplacementNamed('/login');
+    // Or create a Userdata object
+    var newUser = Userdata( _savedfirstname, _savedlastname, _savedEmail, _savedpassword);
+    users.add(newUser);
+    for (int i = 0; i < users.length; i++) {
+  print('Name at index $i: ${users[i].firstname}');
+}
+
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Registered!')));
+    Navigator.of(context).pushReplacementNamed('/login',
+      arguments: users);
     setState(() => _submitting = false);
   }
 
@@ -170,6 +188,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               controller: _firstCtrl,
                               validator: (v) =>
                                   _validateNotEmpty(v, 'First name'),
+                                  onSaved: (value) {
+                          _savedfirstname = value ?? '';
+                        },
                               textInputAction: TextInputAction.next,
                               decoration: _fieldDeco(
                                 label: 'Firstname',
@@ -183,6 +204,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               controller: _lastCtrl,
                               validator: (v) =>
                                   _validateNotEmpty(v, 'Last name'),
+                                  onSaved: (value) {
+                          _savedlastname = value ?? '';
+                        },
                               textInputAction: TextInputAction.next,
                               decoration: _fieldDeco(
                                 label: 'Lastname',
@@ -199,6 +223,9 @@ class _SignUpPageState extends State<SignUpPage> {
                         controller: _emailCtrl,
                         keyboardType: TextInputType.emailAddress,
                         validator: _validateEmail,
+                        onSaved: (value) {
+                          _savedEmail = value ?? '';
+                        },
                         textInputAction: TextInputAction.next,
                         decoration: _fieldDeco(
                           label: 'Email',
@@ -234,6 +261,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       TextFormField(
                         controller: _confirmCtrl,
                         validator: _validateConfirm,
+                        onSaved: (value) {
+                          _savedpassword = value ?? '';
+                        },
                         obscureText: _obscure2,
                         decoration: _fieldDeco(
                           label: 'Confirm Password',
@@ -337,6 +367,7 @@ class _SocialSquare extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onTap;
 
+  // ignore: unused_element_parameter
   const _SocialSquare({Key? key, required this.icon, this.onTap})
     : super(key: key);
 
