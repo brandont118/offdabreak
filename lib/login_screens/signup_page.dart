@@ -3,14 +3,12 @@ import 'userdata.dart';
 
 List<Userdata> users = [];
 
-
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
 }
-
 
 class _SignUpPageState extends State<SignUpPage> {
   static const _blue = const Color.fromRGBO(8, 45, 115, 1);
@@ -69,7 +67,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Future<void> _onRegister() async {
     if (!_formKey.currentState!.validate()) return;
-    
+
     _formKey.currentState!.save(); // Call save to trigger onSaved callbacks
 
     setState(() => _submitting = true);
@@ -80,15 +78,21 @@ class _SignUpPageState extends State<SignUpPage> {
     // print('First: $_savedfirstname, Last: $_savedlastname, Email: $_savedEmail');
 
     // Or create a Userdata object
-    var newUser = Userdata( _savedfirstname, _savedlastname, _savedEmail, _savedpassword);
+    var newUser = Userdata(
+      _savedfirstname,
+      _savedlastname,
+      _savedEmail,
+      _savedpassword,
+    );
     users.add(newUser);
     for (int i = 0; i < users.length; i++) {
-  print('Name at index $i: ${users[i].firstname}');
-}
+      print('Name at index $i: ${users[i].firstname}');
+    }
 
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Registered!')));
-    Navigator.of(context).pushReplacementNamed('/login',
-      arguments: users);
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Registered!')));
+    Navigator.of(context).pushReplacementNamed('/login', arguments: users);
     setState(() => _submitting = false);
   }
 
@@ -188,9 +192,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               controller: _firstCtrl,
                               validator: (v) =>
                                   _validateNotEmpty(v, 'First name'),
-                                  onSaved: (value) {
-                          _savedfirstname = value ?? '';
-                        },
+                              onSaved: (value) {
+                                _savedfirstname = value ?? '';
+                              },
                               textInputAction: TextInputAction.next,
                               decoration: _fieldDeco(
                                 label: 'Firstname',
@@ -204,9 +208,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               controller: _lastCtrl,
                               validator: (v) =>
                                   _validateNotEmpty(v, 'Last name'),
-                                  onSaved: (value) {
-                          _savedlastname = value ?? '';
-                        },
+                              onSaved: (value) {
+                                _savedlastname = value ?? '';
+                              },
                               textInputAction: TextInputAction.next,
                               decoration: _fieldDeco(
                                 label: 'Lastname',
@@ -273,7 +277,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               _obscure2
                                   ? Icons.visibility_off_outlined
                                   : Icons.visibility_outlined,
-                              color: Colors.white70,  
+                              color: Colors.white70,
                             ),
                             onPressed: () =>
                                 setState(() => _obscure2 = !_obscure2),

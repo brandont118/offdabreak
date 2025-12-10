@@ -13,8 +13,7 @@ class Markplayer extends StatefulWidget {
   Markplayer(
     this.x,
     this.y,
-    this.bunkerName, 
-    {
+    this.bunkerName, {
     this.visible = false,
     super.key,
   }) {

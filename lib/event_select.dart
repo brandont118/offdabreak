@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:offdabreak/_matches.dart';
 import 'package:offdabreak/event_button_format.dart';
+import 'match_item.dart';
 
+final List<MatchItem> _matches = matchesData;
 
 class EventSelect extends StatelessWidget {
   const EventSelect({super.key});
@@ -8,7 +11,8 @@ class EventSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar( //change this so that AppBar is not needed
+      appBar: AppBar(
+        //change this so that AppBar is not needed
         title: const Text("Home"),
         titleTextStyle: const TextStyle(
           fontSize: 25,
@@ -16,14 +20,18 @@ class EventSelect extends StatelessWidget {
           color: Colors.white,
         ),
         actions: [
-    IconButton(
-      icon: const Icon(Icons.account_circle, color: Colors.white, size: 30),
-      onPressed: () {
-        _showProfileMenu(context);
-      },
-    ),
-  ],
-        
+          IconButton(
+            icon: const Icon(
+              Icons.account_circle,
+              color: Colors.white,
+              size: 30,
+            ),
+            onPressed: () {
+              _showProfileMenu(context);
+            },
+          ),
+        ],
+
         // backgroundColor: Color.fromRGBO(70, 0, 0,1), //dark red
         backgroundColor: const Color.fromRGBO(8, 45, 115, 1),
       ),
@@ -43,26 +51,30 @@ class EventSelect extends StatelessWidget {
                 const SizedBox(height: 315),
 
                 HomeButtonsColumn(
-                  items: const [
+                  items: [
                     HomeButtonSpec(
                       label: 'Tampa Bay',
                       route: '/second',
                       asset: 'assets/TampaBay.png',
+                      matches: [_matches[2], _matches[3]],
                     ),
                     HomeButtonSpec(
                       label: 'Atlantic City',
                       route: '/second',
                       asset: 'assets/AtlanticCity.png',
+                      matches: [_matches[4], _matches[5]],
                     ),
                     HomeButtonSpec(
                       label: 'Midwest',
                       route: '/second',
                       asset: 'assets/midwest.png',
+                      matches: [_matches[6], _matches[7]],
                     ),
                     HomeButtonSpec(
                       label: 'Lone Star',
                       route: '/second',
                       asset: 'assets/LoneStar_Logo.png',
+                      matches: [_matches[8], _matches[9]],
                     ),
                   ],
                 ),
@@ -90,9 +102,8 @@ class EventSelect extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  // Color.fromRGBO(70, 0, 0,1), //dark red 
+                  // Color.fromRGBO(70, 0, 0,1), //dark red
                   // Color.fromRGBO(96, 65, 65, 1),
-
                   Color.fromRGBO(8, 45, 115, 1), //dark blue
                   Color.fromRGBO(117, 128, 149, 1),
                 ],
@@ -144,11 +155,12 @@ class EventSelect extends StatelessWidget {
                 const SizedBox(height: 205), // Maintain vertical spacing
 
                 HomeButtonsColumn(
-                  items: const [
+                  items: [
                     HomeButtonSpec(
                       label: 'World Cup',
                       route: '/second',
                       asset: 'assets/WorldCup_Logo.png',
+                      matches: [_matches[0], _matches[1]],
                     ),
                   ],
                 ),
@@ -194,39 +206,38 @@ class EventSelect extends StatelessWidget {
   }
 
   void _showProfileMenu(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (context) {
-      return SafeArea(
-        child: Wrap(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: const Text('Profile'),
-              onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Profile tapped')),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/login', // 👈 goes back to your login screen
-                  (Route<dynamic> route) => false,
-                );
-              },
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
-
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.person),
+                title: const Text('Profile'),
+                onTap: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Not available yet')),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text('Logout'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/login', // 👈 goes back to your login screen
+                    (Route<dynamic> route) => false,
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

@@ -11,7 +11,7 @@ class MatchItem {
     required this.minute,
     required this.isPm,
     List<PointData>? points,
-  }): points = points ?? [];
+  }) : points = points ?? [];
 
   final String id;
   final String team1;

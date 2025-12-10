@@ -1,5 +1,5 @@
 class PointData {
-    PointData({
+  PointData({
     required this.id,
     this.team1 = "Team A",
     this.team2 = "Team B",
@@ -8,7 +8,7 @@ class PointData {
     this.remainingMinutes = 15,
     this.remainingSeconds = 0,
     this.isLastPoint = false,
-  }): bunkers = bunkers ?? [];
+  }) : bunkers = bunkers ?? [];
 
   final int id;
   String? winner;
@@ -21,5 +21,7 @@ class PointData {
   final List<String> bunkers;
 
   String get remainingTimeText =>
-      '${remainingMinutes.toString().padLeft(2,'0')}:${remainingSeconds.toString().padLeft(2,'0')}';
+      '${remainingMinutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+
+  int get minutes => remainingMinutes;
 }

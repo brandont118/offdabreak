@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
-  static const _primaryBlue = const Color.fromRGBO(8, 45, 115, 1); // button color
-  static const _textColor = Colors.black;        // headline
-  static const _subText   = Colors.black54;      // subtitle
+  static const _primaryBlue = const Color.fromRGBO(
+    8,
+    45,
+    115,
+    1,
+  ); // button color
+  static const _textColor = Colors.black; // headline
+  static const _subText = Colors.black54; // subtitle
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +32,11 @@ class WelcomePage extends StatelessWidget {
 
                   // Illustration (use an asset if you have one)
                   // Replace with: Image.asset('assets/images/welcome.png', height: 180)
-                  Icon(Icons.emoji_emotions_outlined, size: 130, color: _primaryBlue.withOpacity(.9)),
+                  Icon(
+                    Icons.emoji_emotions_outlined,
+                    size: 130,
+                    color: _primaryBlue.withOpacity(.9),
+                  ),
                   const SizedBox(height: 24),
 
                   // Title
@@ -61,7 +70,8 @@ class WelcomePage extends StatelessWidget {
                   SizedBox(
                     height: 52,
                     child: ElevatedButton(
-                      onPressed: () => Navigator.of(context).pushNamed('/login'),
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed('/login'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _primaryBlue,
                         foregroundColor: Colors.white,
@@ -70,7 +80,8 @@ class WelcomePage extends StatelessWidget {
                         ),
                         elevation: 3,
                         textStyle: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       child: const Text('Sign in'),
@@ -83,7 +94,8 @@ class WelcomePage extends StatelessWidget {
                   SizedBox(
                     height: 52,
                     child: OutlinedButton(
-                      onPressed: () => Navigator.of(context).pushNamed('/signup'),
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed('/signup'),
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: _primaryBlue, width: 1.6),
                         foregroundColor: _primaryBlue,
@@ -91,7 +103,8 @@ class WelcomePage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         textStyle: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       child: const Text('Register'),

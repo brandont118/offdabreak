@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'match_item.dart';
 
-
 //moved MatchItem to seperate folder
 
 // ====== SCREEN ======
@@ -13,11 +12,23 @@ class MatchSelect extends StatefulWidget {
     "Red Legion",
     "PaintballFIT",
     "Edmonton Impact",
+    "San Antonio X-Factor",
+    "Tampa Bay Damage",
+    "Ton Ton FSU",
+    "Houston Heat",
+    "New Orleans Hurricanes",
+    "Baltimore Arsenal",
+    "Infamous",
+    "ac DIESEL",
+    "Leverage",
+    "Royal City Seadogs",
     "San Diego Dynasty",
     "Los Angeles Ironmen",
     "Chicago AfterShock",
     "Seattle Uprising",
     "ASG Aftermath",
+    "New York Xtreme",
+    "NRG Elite",
   ];
 
   static List<String> ap = const ['am', 'pm'];
@@ -244,11 +255,15 @@ class _MatchSelectState extends State<MatchSelect> {
                           child: ElevatedButton(
                             onPressed: () async {
                               debugPrint("Pressed ${m.label}");
-                              //TODO: Push the new data of the points
-                              Navigator.pushNamed (
+                              Navigator.pushNamed(
                                 context,
                                 '/third',
-                                arguments: {'point':m.points, "t1":m.team1,"t2":m.team2}); 
+                                arguments: {
+                                  'point': m.points,
+                                  "t1": m.team1,
+                                  "t2": m.team2,
+                                },
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
@@ -330,7 +345,7 @@ class _MatchSelectState extends State<MatchSelect> {
     return DateTime(int.parse(p[0]), int.parse(p[1]), int.parse(p[2]));
   }
 
-  //pop up screen for the new match
+  // * Pop up screen for the new match
   Future<Object?> _newMatchPopup(BuildContext context) {
     selectedteam1 = null;
     selectedteam2 = null;
@@ -430,6 +445,7 @@ class _MatchSelectState extends State<MatchSelect> {
                           child: DropdownMenu<String>(
                             hintText: 'HH',
                             controller: hourController,
+                            menuHeight: 300,
                             dropdownMenuEntries:
                                 List.generate(12, (i) => (i + 1))
                                     .map(
@@ -447,6 +463,7 @@ class _MatchSelectState extends State<MatchSelect> {
                         Expanded(
                           child: DropdownMenu<String>(
                             hintText: 'MM',
+                            menuHeight: 300,
                             controller: minutesController,
                             dropdownMenuEntries: List.generate(60, (i) => i)
                                 .map(
@@ -489,6 +506,7 @@ class _MatchSelectState extends State<MatchSelect> {
                           child: DropdownMenu<String>(
                             hintText: 'home team',
                             controller: team1Controller,
+                            menuHeight: 200,
                             dropdownMenuEntries: MatchSelect.teams
                                 .map(
                                   (team) => DropdownMenuEntry<String>(
@@ -507,6 +525,7 @@ class _MatchSelectState extends State<MatchSelect> {
                         Expanded(
                           child: DropdownMenu<String>(
                             hintText: 'away team',
+                            menuHeight: 200,
                             controller: team2Controller,
                             dropdownMenuEntries: MatchSelect.teams
                                 .map(

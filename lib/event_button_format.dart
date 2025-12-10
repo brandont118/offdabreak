@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'match_item.dart';
-import 'pointdata.dart';
 
 //event buttons
 class HomeButtonSpec {
@@ -8,13 +7,15 @@ class HomeButtonSpec {
   final String route;
   final IconData? icon; // optional built-in icon
   final String? asset; // optional image asset (png/svg)
+  final List<MatchItem> matches;
 
-  const HomeButtonSpec({
+  HomeButtonSpec({
     required this.label,
     required this.route,
     this.icon,
     this.asset,
-  });
+    List<MatchItem>? matches,
+  }) : matches = matches ?? [];
 }
 
 //button format perm style
@@ -28,40 +29,6 @@ class HomeButton extends StatefulWidget {
 }
 
 class _HomeButtonState extends State<HomeButton> {
-  final List<MatchItem> _matches = [
-    MatchItem(
-      // Dummy data
-      id: "1",
-      team1: "Team A",
-      team2: "Team B",
-      date: DateTime.now(),
-      hour12: 10,
-      minute: 0,
-      isPm: false,
-      points: [
-      PointData(id: 1,winner: "ME", bunkers: ['home']),
-      PointData(id: 2),
-      PointData(id: 3),
-    ],
-    ),
-    MatchItem(
-      // Dummy data
-      id: "2",
-      team1: "Team C",
-      team2: "Team D",
-      date: DateTime.now(),
-      hour12: 11,
-      minute: 0,
-      isPm: false,
-      points: [
-      PointData(id: 1, winner: "ME"),
-      PointData(id: 2),
-      PointData(id: 3),
-      PointData(id: 4),
-    ],
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -84,7 +51,10 @@ class _HomeButtonState extends State<HomeButton> {
             Navigator.pushNamed(
               context,
               widget.spec.route,
-              arguments: {'match': _matches, 'image': widget.spec.asset!},
+              arguments: {
+                'match': widget.spec.matches,
+                'image': widget.spec.asset!,
+              },
             );
           },
           style: ElevatedButton.styleFrom(

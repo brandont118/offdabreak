@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'userdata.dart';
 
-List<Userdata> users = [];
+List<Userdata> users = [Userdata('ad', 'min', 'admin', '123456')];
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -27,32 +27,34 @@ class _LoginPageState extends State<LoginPage> {
   String? _validateEmail(String? v) {
     final x = (v ?? '').trim();
     if (x.isEmpty) return 'Email or username is required';
-  
-  // Check if email exists in users list
+
+    // Check if email exists in users list
     if (!users.any((user) => user.email == x)) {
-    return 'Email not found. Please sign up first.';
-  }
+      return 'Email not found. Please sign up first.';
+    }
     return null;
   }
 
-String? _validatePass(String? v) {
-  final password = v ?? '';
-  if (password.isEmpty) return 'Password is required';
-  if (password.length < 6) return 'Use at least 6 characters';
+  String? _validatePass(String? v) {
+    final password = v ?? '';
+    if (password.isEmpty) return 'Password is required';
+    if (password.length < 6) return 'Use at least 6 characters';
 
-  final email = _emailCtrl.text.trim();
+    final email = _emailCtrl.text.trim();
 
-  // Safely look up user (nullable)
-  final Userdata? user =
-      users.where((u) => u.email == email).cast<Userdata?>().firstOrNull;
+    // Safely look up user (nullable)
+    final Userdata? user = users
+        .where((u) => u.email == email)
+        .cast<Userdata?>()
+        .firstOrNull;
 
-  // If user exists, verify password
-  if (user != null && user.password != password) {
-    return 'Password is incorrect';
+    // If user exists, verify password
+    if (user != null && user.password != password) {
+      return 'Password is incorrect';
+    }
+
+    return null;
   }
-
-  return null;
-}
 
   Future<void> _onLogin() async {
     if (!_formKey.currentState!.validate()) return;

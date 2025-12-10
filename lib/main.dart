@@ -8,16 +8,12 @@ import 'login_screens/welcome_page.dart';
 import 'login_screens/signup_page.dart';
 import 'login_screens/forgot_pw.dart';
 
-// void main() {
-//   runApp(const MyApp());
-// }
-
 void main() {
   runApp(
     MaterialApp(
       title: 'Named Routes',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/welcome', //!change back /welcome
+      initialRoute: '/welcome',
       routes: {
         '/welcome': (context) => WelcomePage(),
         '/login': (context) => LoginPage(),
@@ -25,17 +21,9 @@ void main() {
         'forgotpw': (context) => ForgotPasswordPage(),
         '/': (context) => EventSelect(),
         '/second': (context) => MatchSelect(),
-        '/third': (context) =>  PointSelect(),
+        '/third': (context) => PointSelect(),
         '/fourth': (context) => PointEdit(),
       },
     ),
   );
 }
-
-
-//Moved to event_select.dart
-
-//Moved to match_select.dart
-
-//Moved to point_edit.dart
-

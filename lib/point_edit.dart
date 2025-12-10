@@ -2,17 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:offdabreak/markplayer.dart';
 import 'pointdata.dart';
 
-//Test data
-// ignore: non_constant_identifier_names
-
 List<String> locations = [];
 
 // make it so that it is draggable possible
 // possible drawing functions
 class PointEdit extends StatefulWidget {
-  final int? pointNumber; // null if new point
-
-  const PointEdit({super.key, this.pointNumber});
+  const PointEdit({super.key});
 
   @override
   State<PointEdit> createState() => _PointEditState();
@@ -77,14 +72,11 @@ class _PointEditState extends State<PointEdit> {
   String? winner;
 
   // Remaining game time
-  int remainingMinutes = 15;
-  int remainingSeconds = 0;
+  late int remainingMinutes = _pointdata.minutes;
+  late int remainingSeconds = _pointdata.remainingSeconds;
 
   // Last point toggle
-  bool isLastPoint = false;
-
-  String get remainingTimeText =>
-      '${remainingMinutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+  late bool isLastPoint = _pointdata.isLastPoint;
 
   int get activeBunkerCount => bunkerspots.where((b) => b.isVisible).length;
 
@@ -97,21 +89,6 @@ class _PointEditState extends State<PointEdit> {
             icon: const Icon(Icons.add_box),
             tooltip: 'Save',
             onPressed: () {
-              // Save active bunkers
-              // final activeBunkers = bunkerspots
-              //     .where((b) => b.isVisible)
-              //     .map((b) => b.bunkerName)
-              //     .toList();
-
-              // final pn =
-              //     widget.pointNumber ??
-              //     (point_data.keys.isEmpty ? 1 : point_data.keys.last + 1);
-
-              // point_data[pn] = [winner ?? 'A', ...activeBunkers];
-
-              // print(
-              //   'Point $pn saved: Winner: $winner, Active Bunkers: $activeBunkers',
-              // );
               //*saves bunker locationss to class
               print(locations);
               _pointdata.bunkers.clear();
@@ -152,14 +129,7 @@ class _PointEditState extends State<PointEdit> {
                   ),
               ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                print(locations);
-              },
-              child: Text("press"),
-            ), //debug
             SizedBox(height: 15),
-
             // * Winner selection --start
             Center(
               child: Row(
@@ -173,7 +143,7 @@ class _PointEditState extends State<PointEdit> {
                   TextButton(
                     style: TextButton.styleFrom(
                       backgroundColor: _pointdata.winner == team1
-                          ? Colors.green
+                          ? const Color.fromRGBO(8, 45, 115, 1)
                           : Colors.grey[300],
                       foregroundColor: _pointdata.winner == team1
                           ? Colors.white
@@ -193,7 +163,7 @@ class _PointEditState extends State<PointEdit> {
                   TextButton(
                     style: TextButton.styleFrom(
                       backgroundColor: _pointdata.winner == team2
-                          ? Colors.green
+                          ? const Color.fromRGBO(8, 45, 115, 1)
                           : Colors.grey[300],
                       foregroundColor: _pointdata.winner == team2
                           ? Colors.white
@@ -231,6 +201,7 @@ class _PointEditState extends State<PointEdit> {
                     onChanged: (value) {
                       setState(() {
                         remainingMinutes = value!;
+                        _pointdata.remainingMinutes = remainingMinutes;
                       });
                     },
                   ),
@@ -248,6 +219,7 @@ class _PointEditState extends State<PointEdit> {
                     onChanged: (value) {
                       setState(() {
                         remainingSeconds = value!;
+                        _pointdata.remainingSeconds = remainingSeconds;
                       });
                     },
                   ),
@@ -268,6 +240,7 @@ class _PointEditState extends State<PointEdit> {
                     onChanged: (value) {
                       setState(() {
                         isLastPoint = value;
+                        _pointdata.isLastPoint = isLastPoint;
                       });
                     },
                   ),
@@ -279,7 +252,7 @@ class _PointEditState extends State<PointEdit> {
 
             // Display current selection
             Text(
-              "Remaining Time: $remainingTimeText",
+              "Remaining Time: ${_pointdata.remainingTimeText}",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Text(

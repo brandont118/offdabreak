@@ -39,10 +39,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     setState(() => _submitting = false);
   }
 
-  InputDecoration _fieldDeco({
-    required String label,
-    IconData? prefix,
-  }) {
+  InputDecoration _fieldDeco({required String label, IconData? prefix}) {
     return InputDecoration(
       labelText: label,
       labelStyle: const TextStyle(color: Colors.white70),
@@ -89,7 +86,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter, end: Alignment.bottomCenter,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
             colors: [
               Color.fromRGBO(8, 45, 115, 1),
               Color.fromRGBO(34, 87, 170, 1),
@@ -119,8 +117,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       const SizedBox(height: 24),
 
                       // Illustration placeholder (swap with Image.asset if you have one)
-                      Icon(Icons.help_outline_rounded,
-                          size: 120, color: Colors.white.withOpacity(0.9)),
+                      Icon(
+                        Icons.help_outline_rounded,
+                        size: 120,
+                        color: Colors.white.withOpacity(0.9),
+                      ),
                       const SizedBox(height: 24),
 
                       // Email field
@@ -155,20 +156,26 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             backgroundColor: Colors.white.withOpacity(0.25),
                             foregroundColor: Colors.white,
                             side: const BorderSide(
-                                color: Colors.white70, width: 1),
+                              color: Colors.white70,
+                              width: 1,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
                             elevation: 0,
                             textStyle: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                           child: _submitting
                               ? const SizedBox(
-                                  width: 22, height: 22,
+                                  width: 22,
+                                  height: 22,
                                   child: CircularProgressIndicator(
-                                      strokeWidth: 2, color: Colors.white),
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
                                 )
                               : const Text('Forgot Password'),
                         ),
